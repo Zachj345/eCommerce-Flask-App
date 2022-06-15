@@ -1,0 +1,359 @@
+<html>
+  <title>{% block title %} Herbs {%endblock%}</title>
+  {% extends 'base.html' %} {% block content %}
+  <head>
+    {% if not user.is_authenticated %}
+    <script> function loadModal(){
+       $("#exampleModal").modal('show');
+    };
+    window.onload = function(){
+      loadModal();
+    };
+  </script>
+
+  {% else %}
+
+  <script>
+     
+    window.onload = () => {
+      document.getElementById('cart-btn').addEventListener('click',
+       document.getElementById('cart-toggle').click())
+    };
+  </script>
+ 
+    {% endif %}
+
+    
+    <script>
+      function addProduct(userId){
+        
+  
+        let productPage = document.getElementById('products');
+        let reloadTitle = document.getElementById('header');
+        let reloadBody = document.getElementById('cart-body');
+
+        
+  
+      fetch(`/add-product/${userId}`, {method:'POST', 
+    headers: {
+      'Content-Type':' application/json'
+    }}).then((res) => res.json()).then((data) => {
+        console.log(data);
+  
+        $(productPage).load(document.URL +' '+ '#products')
+        $(reloadTitle).load(document.URL + ' ' + '#header h5, #x');
+        $(reloadBody).load(document.URL +' '+ '#cart-body');     
+
+        console.log('refreshed page')
+      })
+        .catch((e) => alert(e));
+        
+             
+      }
+    </script>
+    
+    <style>
+      * {
+        margin: 0;
+        padding: 0%;
+        
+      }
+      .break {
+        height: 39vh;
+
+      }
+      .main {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+      }
+
+      .container {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+      }
+      .background2 {
+        width: 100vw;
+        height: 50vh;
+        background-image: url("static/images/leafBackground.jpg");
+        background-size: cover;
+        display: flex;
+        align-items: center;
+      }
+      .title {
+        margin: auto;
+        color: whitesmoke;
+        text-align: center;
+        font-size: 10vh;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+      }
+      .products {
+        margin: auto;
+        /* height: 100vh; */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        width: 100vw;
+
+      }
+      #cart-btn {
+        width: 90%;
+        margin: 5%;
+      }
+      #card {
+        flex: 0 1 330px;
+        margin: 3% 5% 2.5% 5%;
+        border: solid grey 2px;
+        
+      }
+      #card img {
+        padding: 5%;
+      }
+      .item-title,
+      .price {
+        margin: 0px 5% 4% 5%;
+      }
+      .left {
+        float: left;
+      }
+      .sub-button {
+        float: right;
+        padding-left: 5%;
+        padding-right: 5%;
+      }
+      .footer {
+        
+        width: 100vw;
+      
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="main">
+        <div class="background2">
+          <h1 class="title">Wild Crafted Herbs</h1>
+        </div>
+       
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Register Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>To browse out selection of wonderful herbs we ask you to please enter your name,
+                   so that we may set up a cart incase you decide to purchase anything</p>
+                <br>
+                <form method="POST" autocomplete="off">
+            
+             
+                    <input
+                      type="text"
+                      name="name"
+                      id="name"
+                      class="form-control"
+                      placeholder="Enter your name"
+                    />
+                    <br />
+                   
+
+              </div>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-dark sub-button">Register</button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+        
+          
+        
+
+       <div class="products" id="products">
+        
+          
+          <div class="card" id="card" style="width: 24rem">
+            <img
+              src="static/images/chomomile.jpg"
+              class="card-img-top"
+              alt=""
+            />
+            <form onclick="return addProduct({{user.id}})" action="/add-product/{{user.id}}" method="POST">
+            <div class="card-body">
+             
+              <input type="hidden" name="title" id="title" value="Chamomille">
+              <h5 class="card-title item-title" id="title1">Chamomille</h5>
+              <input type="hidden" name="price" id="price" type="number" value="11">
+              <p class="card-text price"><b id="price1">$11.00</b></p>
+              <button class="btn btn-secondary"  id="cart-btn"
+                >Add to Cart</button
+              >
+            
+            </div>
+            </form>
+          
+          </div>
+        
+       
+          <div class="card" id="card" style="width: 24rem">
+            <img
+              src="static/images/lavender.jpg"
+              class="card-img-top"
+              alt=""
+            />
+            <form onclick="return addProduct({{user.id}})" action="/add-product/{{user.id}}" method="POST">
+            <div class="card-body">
+              <input type="hidden" name="title" id="title" value="Lavender">
+              <h5 class="card-title item-title" id="title2">Lavender</h5>
+              <input type="hidden" name="price" id="price" type="number" value="10">
+              <p class="card-text price"><b id="price2">$10.00</b></p>
+              <button class="btn btn-secondary"  id="cart-btn"
+              >Add to Cart</button
+              >
+            </div>
+          </form>
+          </div>
+          
+          
+          <div class="card" id="card" style="width: 24rem">
+            <img
+              src="static/images/thisle.jpg"
+              class="card-img-top"
+              alt=""
+            />
+            <form action="/add-product/{{user.id}}" onclick="return addProduct({{user.id}})" method="POST">
+            <div class="card-body">
+              <input type="hidden" name="title" id="title" value="Milk Thistle">
+              <h5 class="card-title item-title" id="title3">Milk Thistle</h5>
+              <input type="hidden" name="price" id="price" type="number" value="16">
+              <p class="card-text price"><b id="price3">$16.00</b></p>
+              <button class="btn btn-secondary" id="cart-btn"
+              >Add to Cart</button
+              >
+            </div>
+          </form>
+          </div>
+          
+        
+          
+           <div class="card" id="card" style="width: 24rem">
+            <img
+              src="static/images/capsules.jpg"
+              class="card-img-top"
+              alt=""
+            />
+            <form action="/add-product/{{user.id}}" onclick="return addProduct({{user.id}})" method="POST">
+            <div class="card-body">
+              <input type="hidden" name="title" id="title" value="Sea Moss Supplements">
+              <h5 class="card-title item-title" id="title4">Sea Moss Supplements</h5>
+              <input type="hidden" name="price" type="number" id="price" value="20">
+              <p class="card-text price"><b id="price4">$20.00</b></p>
+              <button class="btn btn-secondary"  id="cart-btn"
+              >Add to Cart</button
+              >
+            </div>
+          </form>
+          </div>
+          
+         
+          <div class="card" id="card" style="width: 24rem">
+            <img
+              src="static/images/sowasop.jpg"
+              class="card-img-top"
+              alt=""
+            />
+            <form action="/add-product/{{user.id}}" onclick="return addProduct({{user.id}})" method="POST">
+            <div class="card-body">
+              <input type="hidden" name="title" id="title" value="Soursop Leaves">
+              <h5 class="card-title item-title" id="title5">Soursop Leaves</h5>
+              <input type="hidden" name="price" id="price" type="number" value="12">
+              <p class="card-text price"><b id="price5">$12.00</b></p>
+                
+              <button  class="btn btn-secondary" id="cart-btn"
+                >Add to Cart</button
+              >
+            </div>
+          </form>
+          </div>
+          
+         
+          <div class="card" id="card" style="width: 24rem">
+            <img
+              src="static/images/basil.jpg"
+              class="card-img-top"
+              alt=""
+            />
+            <form action="/add-product/{{user.id}}" onclick="return addProduct({{user.id}})" method="POST">
+            <div class="card-body">
+              <input type="hidden" name="title" id="title" value="Sage">
+              <h5 class="card-title item-title" id="title6">Sage</h5>
+              <input type="hidden" name="price" id="price" type="number" value="7">
+              <p class="card-text price"><b id="price6">$7.00</b></p>
+
+              <button  class="btn btn-secondary" id="cart-btn"
+                >Add to Cart</button
+              >
+            </div>
+          </form>
+          </div>
+          
+        
+        </div>
+        
+      </div>
+      <footer class="footer">
+        <div class="footer-text">
+          <h4 class="sitemap">Sitemap</h4>
+          <ul>
+            <li class="link-item">
+              <a class="nav-item nav-link director" id="link" href="/home"
+                >Home
+              </a>
+            </li>
+            <li class="link-item">
+              <a class="nav-item nav-link director" id="link" href="/about"
+                >About
+              </a>
+            </li>
+            <li class="link-item">
+              <a class="nav-item nav-link director" id="link" href="/herbs"
+                >Herbs
+              </a>
+            </li>
+            <li class="link-item">
+              <a
+                class="nav-item nav-link director"
+                id="link"
+                href="/return-policy"
+                >Return Policy
+              </a>
+            </li>
+          </ul>
+          <div class="footer-contact">
+            <h4 class="contact">Get in Touch</h4>
+            <ul>
+              <li class="link-item2">Customer support: (201)-657-8803</li>
+              <li class="link-item2">
+                <p>Mon - Fri 9am - 7pm EST,</p>
+                <p>Sat - Closed,</p>
+                <p>Sun - 9am to 7pm EST</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    
+   
+  
+  </body>
+
+  {%endblock%}
+</html>

@@ -1,0 +1,42 @@
+<html>
+  <title>{% block title %} Home {%endblock%}</title>
+  {% extends 'base.html' %} {% block content %}
+  <head>
+    <script>
+      window.onload = function reload() {
+        let reloadTitle = document.getElementById("header");
+        let reloadBody = document.getElementById("cart-body");
+
+        $(reloadTitle).load(document.URL + " " + "#header h5, #x");
+        $(reloadBody).load(document.URL + " " + "#cart-body");
+      };
+    </script>
+    <style>
+      body {
+        background-color: cornsilk;
+      }
+      .message {
+        text-align: center;
+        margin-top: 16%;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+        font-size: 7em;
+      }
+      .lower-message {
+        text-align: center;
+        font-size: 2em;
+        margin: 5% 21%;
+        font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+          "Lucida Sans", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="message">Thank You!</h1>
+    <h3 class="lower-message">
+      You will recieve an email shortly, with an invoice regarding your payment.
+    </h3>
+  </body>
+
+  {%endblock%}
+</html>

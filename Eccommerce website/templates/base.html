@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} Base {% endblock %}</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css"
+      crossorigin="anonymous"
+    />
+
+    <script>
+      function delProduct(title) {
+        let reloadTitle = document.getElementById('header');
+        let reloadBody = document.getElementById('cart-body');
+        console.log(title)
+
+        fetch(`/del-product/${title}`, {method:'POST'}).then((res) => res.json())
+        .then((data) => {
+
+          $(reloadTitle).load(document.URL + ' ' + '#header h5, #x');
+          $(reloadBody).load(document.URL +' '+ '#cart-body');
+
+        }).catch((e) => alert(e))
+      }
+    </script>
+
+    <script type="text/javascript">
+      
+      function refreshSub(title){
+        let reloadTitle = document.getElementById('header');
+        let reloadBody = document.getElementById('cart-body');
+
+        console.log(title)
+        fetch(`/sub-quantity/${title}`, {method:'POST'}).then((res) => res.json()).then((data) => {
+          
+          $(reloadTitle).load(document.URL + ' ' + '#header h5, #x');
+          $(reloadBody).load(document.URL +' '+ '#cart-body');
+          
+
+        }).catch((e) => alert(e));
+
+      };
+    </script>
+    
+
+    <script>
+      function refreshAdd(title){
+        
+
+        let reloadTitle = document.getElementById('header');
+        let reloadBody = document.getElementById('cart-body');
+    
+    
+        
+        console.log(title)
+        fetch(`/add-quantity/${title}`, {method:'POST'}).then((res) => res.json())
+        .then((data) => {
+
+          $(reloadTitle).load(document.URL + ' ' + '#header h5, #x');
+          $(reloadBody).load(document.URL +' '+ '#cart-body');
+         
+          
+          
+        }).catch((e) => alert(e))
+      }
+    </script>
+    <style>
+      * {
+        /* getting rid of defaults */
+        margin: 0;
+        padding: 0;
+      }
+      .director {
+        color: whitesmoke;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: cornsilk;
+        display: flex;
+        min-height: 100vh;
+        flex-direction: column;
+        
+      }
+      .container {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        width: 100vw;
+      }
+      .main {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        /* to make sure content doesnt disapear under the footer */
+      }
+      .footer {
+        background-color: black;
+        width: 100vw;
+        height: 229px;
+        margin-top: auto;
+        /* to bring it back in viewport */
+        /* margin-top: -200px; */
+      }
+      .footer-text {
+        display: block;
+      }
+      .sitemap {
+        margin: 20px 15% 9px 20%;
+        color: white;
+      }
+      .link-item {
+        margin: 4px 15% 4px 17%;
+        list-style: none;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .link-item:hover {
+        transform: scaleX(1.01);
+      }
+      #link {
+        color: white;
+      }
+      .contact {
+        color: whitesmoke;
+        margin-left: 12%;
+      }
+      .footer-contact {
+        margin: -224px 0% 14px 55%;
+      }
+      .footer-contact ul {
+        margin-top: 24px;
+      }
+      .link-item2 {
+        margin: 8px 15% 6px -5%;
+        list-style: none;
+        color: whitesmoke;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .link-item2 p {
+        margin-bottom: 3px;
+        margin-right: 48%;
+        text-align: center;
+      }
+      
+      .cart-div {
+        background-color: rgb(159, 176, 182);
+        float: right;
+      }
+      .cart-title {
+        text-align: center;
+        margin: auto;
+        margin-top: 5%;
+
+      }
+      .item-price {
+        margin: 5%;
+      } 
+      .item-amount {
+        margin:5%;
+      }
+     .subtotal {
+       font-size: 1.5em;
+       font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+       text-align: center;
+     }
+     .del-product {
+       float: right;
+     }
+     #quantity {
+       display: flex;
+       flex-direction: row;
+     }
+     .plus-minus-div {
+      height: 50%;
+      
+      margin-top: 3% ;
+
+     }
+     #cart-toggle {
+       float: right;
+     }
+     #header {
+       text-align: center;
+     }
+     #checkout-btn {
+        width: 90%;
+        margin: 5% 0 5% 5%;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %} {% if category ==
+      'error' %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% else %}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {%endif%} {%endfor%} {% endif %} {%endwith%}
+    </section>
+    <div class="collapse" id="navbarToggleExternalContent">
+      <div class="bg-dark p-4">
+        <a class="nav-item nav-link director" id="home" href="/"> Home </a>
+        <a class="nav-item nav-link director" id="about" href="/about"
+          >About
+        </a>
+        <a class="nav-item nav-link director" id="herbs" href="/herbs"
+          >Natural Herbs
+        </a>
+
+        <a
+          class="nav-item nav-link director"
+          id="returns"
+          href="/return-policy"
+        >
+          Return Policy
+        </a>
+      </div>
+    </div>
+    
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarToggleExternalContent"
+          aria-controls="navbarToggleExternalContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>   
+        {% if user.is_authenticated %}
+        <button class="navbar-toggler" id="cart-toggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+         aria-controls="offcanvasNavbar">
+          <span class="navbar-toggler-icon"></span> 
+          Cart
+        </button>
+        
+        <div class="offcanvas offcanvas-end cart-div" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+         
+          <div class="offcanvas-header" id="header">
+            <h5 class="offcanvas-title cart-title"  
+            id="offcanvasNavbarLabel">Cart: {{user.product | length}}</h5>
+            <button type="button" class="btn-close text-reset" id="x" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <br>
+          <div class="offcanvas-body" id="cart-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+              {% for (title, quantity), price in full_item_dict.items() %}
+              
+              <li class="nav-item">
+                <h4 class="item-title"><b id="title">{{title}}</b></h4>
+                <button onclick="delProduct('{{title}}')" type="button" 
+                  class="btn-close del-product" aria-label="Close"></button>
+                <p class="item-price">Price: ${{price}}.00</p>
+                
+                <span id="quantity"><p class="item-amount">Quantity: {{quantity}}</p> &nbsp;&nbsp; 
+                  <div class="btn-group plus-minus-div" role="group" aria-label="Basic outlined example">
+                  <button id="sub-quantity"
+                    onclick="refreshSub('{{title}}')" type="button" class="btn btn-outline-primary">-</button>
+                  <button type="button" onclick="refreshAdd('{{title}}')" id="add-quantity" class="btn btn-outline-primary">+</button>
+                </div></span>
+                
+                <hr>
+
+
+                
+              </li>
+              {% endfor %}
+              <br>
+              <br>
+              <br>
+              <br>
+              <p class="subtotal">Subtotal: ${{get_subtotal(user.id)}}.00</p>
+              <br>
+              <br>
+              <br>
+              
+              
+        </div>
+              {% if user.product | length > 0 %}
+              <button class="btn btn-success" id="checkout-btn"
+              >Checkout</button
+              >
+              {% endif %}
+        
+      </div>
+      </div>
+      {%endif%}
+    </nav>
+ 
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    let checkout_public_key = "{{checkout_public_key}}";
+    let checkout_session_id = "{{checkout_session_id}}";
+  </script>
+  <script src="{{ url_for('static', filename='stripe.js') }}"></script>
+  
+  
+  
+  
+    
+    <script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script>
+    <script src="{{url_for('static', filename='index.js')}}"></script>
+  </body>
+
+  {%block content%} {%endblock%}
+</html>
